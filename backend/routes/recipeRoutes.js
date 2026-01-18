@@ -7,13 +7,13 @@ const upload = multer({ storage: multer.memoryStorage() });
 
 router.post('/generate', async (req, res) => {
   try {
-    const { ingredients } = req.body;
+    const { ingredients, dietaryFilters, difficultyLevel, cookingTime } = req.body;
 
     if (!ingredients || !Array.isArray(ingredients) || ingredients.length === 0) {
       return res.status(400).json({ error: 'Please provide at least one ingredient' });
     }
 
-    const recipes = await generateRecipes(ingredients);
+    const recipes = await generateRecipes(ingredients, dietaryFilters || {}, difficultyLevel || 'any', cookingTime || 'any');
 
     // Skip image generation due to billing limits
     // Add placeholder or no images

@@ -2,8 +2,8 @@
 
 ## Project Information
 **Project Name:** The Improvising Chef
-**Developer:** [Your Name]
-**Date:** December 2024
+**Developer:** Liron Lizmi & Ortal Nisim
+**Date:** January 2026
 **Course:** AI-Based Software Development
 
 ---

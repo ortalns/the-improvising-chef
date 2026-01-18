@@ -2,9 +2,12 @@ import axios from 'axios';
 
 const API_BASE_URL = 'http://localhost:3001/api';
 
-export async function generateRecipes(ingredients) {
+export async function generateRecipes(ingredients, dietaryFilters = {}, difficultyLevel = 'any', cookingTime = 'any') {
   const response = await axios.post(`${API_BASE_URL}/recipes/generate`, {
     ingredients,
+    dietaryFilters,
+    difficultyLevel,
+    cookingTime,
   });
   return response.data;
 }

@@ -4,9 +4,40 @@ const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
 
-async function generateRecipes(ingredients) {
+async function generateRecipes(ingredients, dietaryFilters = {}, difficultyLevel = 'any', cookingTime = 'any') {
+  // Build dietary restrictions string
+  const restrictions = [];
+  if (dietaryFilters.vegetarian) restrictions.push('vegetarian (no meat or fish)');
+  if (dietaryFilters.vegan) restrictions.push('vegan (no animal products at all)');
+  if (dietaryFilters.glutenFree) restrictions.push('gluten-free (no wheat, barley, rye)');
+  if (dietaryFilters.dairyFree) restrictions.push('dairy-free (no milk, cheese, butter, cream)');
+
+  const dietaryText = restrictions.length > 0
+    ? `\n\nIMPORTANT DIETARY RESTRICTIONS: All recipes MUST be ${restrictions.join(' AND ')}. Do not include any ingredients that violate these restrictions.`
+    : '';
+
+  // Build difficulty level text
+  let difficultyText = '';
+  if (difficultyLevel === 'beginner') {
+    difficultyText = '\n\nDIFFICULTY LEVEL: Beginner-friendly recipes only. Use simple techniques, minimal steps, common equipment, and short cooking times. Avoid complex methods like sous vide, flambéing, or advanced knife skills.';
+  } else if (difficultyLevel === 'intermediate') {
+    difficultyText = '\n\nDIFFICULTY LEVEL: Intermediate recipes. Can include moderate techniques, multiple components, and some timing coordination. Suitable for home cooks with some experience.';
+  } else if (difficultyLevel === 'advanced') {
+    difficultyText = '\n\nDIFFICULTY LEVEL: Advanced/challenging recipes. Can include complex techniques, multiple components, precise timing, and professional methods. For experienced cooks looking for a challenge.';
+  }
+
+  // Build cooking time text
+  let cookingTimeText = '';
+  if (cookingTime === 'quick') {
+    cookingTimeText = '\n\nTIME CONSTRAINT: Quick recipes only! Total time (prep + cooking) must be under 30 minutes. Focus on fast, simple dishes.';
+  } else if (cookingTime === 'medium') {
+    cookingTimeText = '\n\nTIME CONSTRAINT: Medium-time recipes. Total time (prep + cooking) should be between 30-60 minutes.';
+  } else if (cookingTime === 'elaborate') {
+    cookingTimeText = '\n\nTIME CONSTRAINT: Elaborate recipes welcome. Total time (prep + cooking) can be 60 minutes or more. Feel free to suggest dishes that require slow cooking, marinating, or multiple stages.';
+  }
+
   const prompt = `You are a professional chef. Given the following ingredients: ${ingredients.join(', ')},
-  create exactly 3 complete, practical recipes. Each recipe should use as many of the provided ingredients as possible.
+  create exactly 3 complete, practical recipes. Each recipe should use as many of the provided ingredients as possible.${dietaryText}${difficultyText}${cookingTimeText}
 
   Return the response as a JSON array with exactly 3 recipe objects. Each object should have this structure:
   {
