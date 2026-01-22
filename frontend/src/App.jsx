@@ -7,10 +7,12 @@ function App() {
   const [recipes, setRecipes] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [showIngredientInput, setShowIngredientInput] = useState(true);
 
   const handleRecipesGenerated = (generatedRecipes) => {
     setRecipes(generatedRecipes);
     setError(null);
+    setShowIngredientInput(false); // Hide input when recipes are generated
   };
 
   const handleError = (errorMessage) => {
@@ -20,6 +22,12 @@ function App() {
 
   const handleLoadingChange = (isLoading) => {
     setLoading(isLoading);
+  };
+
+  const handleNewSearch = () => {
+    setShowIngredientInput(true);
+    setRecipes([]);
+    setError(null);
   };
 
   return (
@@ -32,11 +40,13 @@ function App() {
       </header>
 
       <main className="app-main">
-        <IngredientInput
-          onRecipesGenerated={handleRecipesGenerated}
-          onError={handleError}
-          onLoadingChange={handleLoadingChange}
-        />
+        {showIngredientInput && (
+          <IngredientInput
+            onRecipesGenerated={handleRecipesGenerated}
+            onError={handleError}
+            onLoadingChange={handleLoadingChange}
+          />
+        )}
 
         {loading && (
           <div className="loading-container">
@@ -52,7 +62,12 @@ function App() {
         )}
 
         {recipes.length > 0 && !loading && (
-          <RecipeDisplay recipes={recipes} />
+          <>
+            <button onClick={handleNewSearch} className="new-search-button">
+              🔍 New Search
+            </button>
+            <RecipeDisplay recipes={recipes} />
+          </>
         )}
       </main>
 

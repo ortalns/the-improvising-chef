@@ -94,6 +94,29 @@ body {
   font-weight: 500;
 }
 
+.new-search-button {
+  background: linear-gradient(135deg, #6aa8e6 0%, #87c4f5 100%);
+  color: white;
+  border: none;
+  padding: 1rem 2.5rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  border-radius: 50px;
+  cursor: pointer;
+  margin-bottom: 2rem;
+  box-shadow: 0 4px 15px rgba(106, 168, 230, 0.4);
+  transition: all 0.3s ease;
+}
+
+.new-search-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(106, 168, 230, 0.6);
+}
+
+.new-search-button:active {
+  transform: translateY(0);
+}
+
 .app-footer {
   text-align: center;
   padding: 2rem;
